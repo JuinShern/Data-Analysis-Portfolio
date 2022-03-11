@@ -13,8 +13,11 @@ A set of existing customer demographics, purchase history together with new cust
 ## Project 3: Design market strategies to increase customer loyalty
 Twelve months of bike sharing data were collected. The data contains 13 variable and over 5 millions row of riding records in Chicago. The company's riders are mainly classified as casual and annaul member. The higher management and financial analyst of the company believe that the company's future growth is highly relying on the number of annual members. The main purpose of the project is to analyse bike sharing trends and design marketing strategies to increase the number of annaul member.
 
-## Project 4: Analyse global power plant and the impact on climate change
+## Project 4: Explore student test performance
+This dataset was open source data from Kaggle and it covers the academic performance of the students and some information about the students. By analysing the dataset, we are able to understand factors that significantly affects students' academic performance and identify those students who require special attention and assistance. Next, the data will be used to predict student academic performance by using regression model. 
+
+## Project 5: Analyse global power plant and the impact on climate change
 This open source dataset was obtained from Kaggle and it covers all power stations and major power generation sources in 164 countries around the world. As electricity generation can come from both renewable and non-renewable sources, an analysis of the main sources of electricity generation currently in use around the world gives us an idea of the contribution of the electricity sector to climate warming in each country and the consequences to social, economy and environment.
 
-## Project 5: Examine COVID-19 cases and vaccination program in Malaysia (in progress)
+## Project 6: Examine COVID-19 cases and vaccination program in Malaysia (in progress)
 COVID-19 cases and vaccination program datasets are collected from the Github of the Ministry of Health Malaysia. The COVID-19 cases dataset includes new cases, recovered cases, etc and breakdown into different age group, vaccination status and location, while vaccination program dataset covers number of daily vaccinations for different age group. The main purpose of this project is to understand the current COVID-19 situation and vaccination progress in Malaysia.
