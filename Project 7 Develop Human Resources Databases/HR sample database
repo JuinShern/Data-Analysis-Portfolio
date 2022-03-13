@@ -1,0 +1,178 @@
+-- HR sample datbase
+--- Create Jobs table
+CREATE TABLE jobs(
+    job_id VARCHAR(4) PRIMARY KEY,
+    job_title VARCHAR(20)
+);
+
+--- Create Regions table
+CREATE TABLE regions(
+    region_id VARCHAR(5) PRIMARY KEY,
+    region_name VARCHAR(20)
+);
+
+--- Create Countries table
+CREATE TABLE countries(
+    country_id VARCHAR(5) PRIMARY KEY,
+    country_name VARCHAR(20),
+    region_id VARCHAR(5),
+    FOREIGN KEY(region_id) REFERENCES regions(region_id) ON DELETE SET NULL
+);
+
+--- Create Locations table
+CREATE TABLE locations(
+    location_id VARCHAR(5) PRIMARY KEY,
+    street_address VARCHAR(30),
+    postal_code INT,
+    city VARCHAR(20),
+    state_province VARCHAR(3),
+    country_id VARCHAR(5),
+    FOREIGN KEY(country_id) REFERENCES countries(country_id)
+);
+
+--- Create Departments table
+CREATE TABLE departments(
+    department_id VARCHAR(5) PRIMARY KEY,
+    department_name VARCHAR(20),
+    location_id VARCHAR(5),
+    FOREIGN KEY(location_id) REFERENCES locations(location_id)
+);
+
+--- Create Employees table
+CREATE TABLE employees(
+    employee_id VARCHAR(5) PRIMARY KEY,
+    first_name VARCHAR(20),
+    last_name VARCHAR(20),
+    email VARCHAR(25),
+    phone_number VARCHAR(15),
+    hire_date DATE,
+    job_id VARCHAR(4),
+    salary DECIMAL(10,2),
+    manager_id VARCHAR(5),
+    department_id VARCHAR(5),
+    FOREIGN KEY(job_id) REFERENCES jobs(job_id) ON DELETE SET NULL,
+    FOREIGN KEY(department_id) REFERENCES departments(department_id) ON DELETE SET NULL
+);
+
+--- Create Dependents table
+CREATE TABLE dependents(
+    dependent_id VARCHAR(5) PRIMARY KEY,
+    first_name VARCHAR(20),
+    last_name VARCHAR(20),
+    relationship VARCHAR(20),
+    employee_id VARCHAR(5),
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+);
+
+--- Insert values into Jobs table
+INSERT INTO jobs VALUES("J001", "Finance Assistant");
+INSERT INTO jobs VALUES("J002", "Finance Manager");
+INSERT INTO jobs VALUES("J003", "HR Assistant");
+INSERT INTO jobs VALUES("J004", "HR Manager");
+INSERT INTO jobs VALUES("J005", "Sales Assistant");
+INSERT INTO jobs VALUES("J006", "Sales Manager");
+
+--- Insert values into Regions table
+INSERT INTO regions VALUES("AP", "Asia Pacific");
+
+--- Insert values into Countries table
+INSERT INTO countries VALUES('AU', "Australia", "AP");
+
+--- Insert values into Locations table
+INSERT INTO locations VALUES("L001", "Office Street", 3000, "Melbourne", "VIC", "AU");
+INSERT INTO locations VALUES("L002", "Sales Street", 3145, "Malvern East", "VIC", "AU");
+
+--- Insert values into Department table
+INSERT INTO departments VALUES("DP001", "Finance", "L001");
+INSERT INTO departments VALUES("DP002", "Human Resource", "L001");
+INSERT INTO departments VALUES("DP003", "Sales", "L002");
+
+--- Insert values into Employees table
+INSERT INTO employees(employee_id,first_name,last_name,email,phone_number,hire_date,job_id,salary,manager_id)
+VALUES
+    ("E001", "Aaron", "Tan", "aaron.t@work.com", "032381234", "2011-03-01", "J002", 7000, ""),
+    ("E002", "Bryan", "Lee", "bryan.l@work.com", "032381235", "2011-05-23", "J004", 6000, ""),
+    ("E003", "Chloe", "Yang", "chloe.y@work.com", "032381236", "2012-02-10", "J006", 5500, ""),
+    ("E004", "Darren", "Ng", "darren.n@work.com", "032381237", "2012-03-14", "J001", 5500, "E002"),
+    ("E005", "Ericka", "Lim", "ericka.l@work.com", "032381238", "2014-04-03", "J003", 4000, "E004"),
+    ("E006", "Felicia", "Lee", "felicia.l@work.com", "032381239", "2015-06-04", "J003", 3500, "E004"),
+    ("E007", "Gordan", "Ong", "gordan.o@work.com", "032381240", "2016-05-13", "J005", 3000, "E006"),
+    ("E008", "Halen", "Chia", "helen.c@work.com", "032381241", "2016-12-19", "J005", 2800, "E006");
+
+UPDATE employees
+SET department_id = "DP001"
+WHERE job_id IN("J001","J002");
+
+UPDATE employees
+SET department_id = "DP002"
+WHERE job_id IN("J003","J004");
+
+UPDATE employees
+SET department_id = "DP003"
+WHERE job_id IN("J005","J006");
+
+--- Inseert values into Deoendents table
+INSERT INTO dependents 
+VALUES
+    ("DD001","Joan","Tan","Daughter","E001"),
+    ("DD002","Jessica","Tan","Daughter","E001"),
+    ("DD003","Jack","Tan","Son","E001"),
+    ("DD004","Ivan","Yap","Son","E006"),
+    ("DD005","Kelly","Lim","Daughter","E003");
+
+--- How many workers are in Finance department?
+SELECT count(employee_id)
+FROM employees
+WHERE department_id IN(
+    SELECT department_id
+    FROM departments
+    WHERE department_name = "Finance"
+);
+
+--- How many workers are working in Melbourne?
+SELECT count(employee_id)
+FROM employees
+WHERE department_id IN(
+    SELECT department_id
+    FROM departments
+    WHERE location_id IN(
+         SELECT location_id
+        FROM locations
+        WHERE city = "Melbourne"                
+)
+);
+
+--- Contact detail of managers
+SELECT first_name, last_name, email, phone_number
+FROM employees
+WHERE manager_id = "";
+
+--- Average workers salary
+SELECT department_id, AVG(salary)
+FROM employees
+GROUP BY department_id;
+
+--- Number of dependents
+SELECT employee_id, count(employee_id)
+FROM dependents
+GROUP BY employee_id;
+
+--- Number of workers working in Australia
+SELECT count(employee_id)
+FROM employees
+WHERE department_id IN(
+    SELECT department_id
+    FROM departments
+    WHERE location_id IN(
+        SELECT location_id
+        FROM locations
+        WHERE country_id = "AU"
+    )
+);
+
+--- Average salary (non-manager)
+SELECT job_id, ROUND(AVG(salary),2) AS Avg_salary
+FROM employees
+WHERE manager_id = ""
+GROUP BY job_id
+ORDER BY Avg_salary DESC;
