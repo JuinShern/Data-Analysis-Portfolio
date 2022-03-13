@@ -21,3 +21,7 @@ This open source dataset was obtained from Kaggle and it covers all power statio
 
 ## Project 6: Examine COVID-19 cases and vaccination program in Malaysia (in progress)
 COVID-19 cases and vaccination program datasets are collected from the Github of the Ministry of Health Malaysia. The COVID-19 cases dataset includes new cases, recovered cases, etc and breakdown into different age group, vaccination status and location, while vaccination program dataset covers number of daily vaccinations for different age group. The main purpose of this project is to understand the current COVID-19 situation and vaccination progress in Malaysia.
+
+## Project 7: Develop and manage database for Human Resources Department
+The HR sample database was collected from a SQL Tutorial website, while employees and other information were fictitious and simulated. The database has 7 tables that record employee information, including employees' job title, department, location, etc. The main purpose of the project is to improve the ability to develop
+manage and use databases.
