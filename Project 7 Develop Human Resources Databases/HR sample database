@@ -261,3 +261,25 @@ WHERE department_id IN(
         WHERE state_province = "California"
     )
 );
+
+--- Which departments are in Charade St?
+SELECT * 
+FROM departments
+WHERE location_id IN(
+    select location_id
+    FROM locations
+    WHERE street_address LIKE "%Charade%"
+);
+
+--- List region names and countries names
+SELECT region_name
+FROM regions
+UNION
+SELECT country_name
+FROM countries;
+
+--- Departments' location
+SELECT departments.department_name, locations.street_address, locations.postal_code, locations.city, locations.state_province
+FROM departments
+INNER JOIN locations
+ON departments.location_id = locations.location_id;
