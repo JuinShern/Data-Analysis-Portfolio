@@ -283,3 +283,12 @@ SELECT departments.department_name, locations.street_address, locations.postal_c
 FROM departments
 INNER JOIN locations
 ON departments.location_id = locations.location_id;
+
+--- Minimum, maximum and average salary of each job position
+SELECT job_title, min_salary, max_salary, ROUND(AVG(employees.salary),2) AS avg_salary
+FROM jobs
+INNER JOIN employees
+ON jobs.job_id = employees.job_id
+GROUP BY jobs.job_id
+ORDER BY avg_salary DESC
+LIMIT 5;
