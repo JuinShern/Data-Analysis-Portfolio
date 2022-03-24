@@ -184,12 +184,7 @@ ann_salary2 <- ann_salary2 %>%
 mean((ann_salary2$model_1 - ann_salary2$amount)/ann_salary2$amount*100)
 
 ### Findings
-- Holding all other variables constant, the minimum wages for the 100 clients are
-$2115.57, on average.
-- Holding all other variables constant, the monthly salary for male client is
-$427.94 higher than female client, on average.
-- Holding all other variables constant, for every 1 unit increase in age, the monthly
-salary is expected to decrease by $13.54.
-- The error rate is more than 30%. The main reason is because the data points
-for salary payment is insufficient and more other variables need to be added to
-increase accuracy of prediction.
+- Holding all other variables constant, the minimum wages that ANZ Bank's clients transferred are $2115.57, on average.
+- Holding all other variables constant, the monthly salary transferred for male client is $427.94 higher than female client, on average.
+- Holding all other variables constant, for every 1 unit increase in age, the monthly salary trnasferred is expected to decrease by $13.54.
+- The error rate is more than 30%. The main reason is because the data points for salary payment is insufficient and more other variables need to be added to increase accuracy of prediction.
