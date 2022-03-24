@@ -158,30 +158,36 @@ group, followed by group age 30 to 40 and retirees.
 - Majority of the individuals does not own a credit card.
 
 ## Predict customer annual salary
-ann_salary <- ANZ_card %>% 
-  select(txn_description, gender, age, amount) %>% 
-  mutate(txn_description = as.factor(txn_description),
-         gender = as.factor(gender)) %>% 
-  filter(txn_description == "PAY/SALARY")
+library(tidyverse)
+predict_salary = read.csv("ANZ synthesised transaction dataset.csv") %>% 
+  mutate(status = as.factor(status),
+         txn_description = as.factor(txn_description),
+         gender = as.factor(gender),
+         customer_id = as.factor(customer_id),
+         movement = as.factor(movement)) %>% 
+  select(customer_id, gender, age, amount, txn_description)
+
+predict_salary <- predict_salary %>% 
+  group_by(customer_id, txn_description, gender) %>% 
+  summarise_all(mean) %>% 
+  pivot_wider(id_cols = c(customer_id, gender, age),
+              names_from = txn_description,
+              values_from = amount) 
+
+predict_salary[is.na(predict_salary)] = 0
 
 set.seed(8869)
-random_rows <- sample(nrow(ann_salary)*0.5, replace = FALSE)
+random_sample = sample(50, replace = FALSE)
 
-ann_salary1 <- ann_salary[random_rows,]
-ann_salary2 <- ann_salary[-random_rows,]
+test_set = predict_salary[random_sample,]
+train_set = predict_salary[-random_sample,]
 
-model_1 = lm(amount~gender+age, data = ann_salary)
+model_1 = lm(data = train_set, `PAY/SALARY`~gender+age+PAYMENT+`PHONE BANK`+POS+`SALES-POS`+`INTER BANK`)
 summary(model_1)
 
-ann_salary1 <- ann_salary1 %>% 
-  mutate(model_1 = predict(model_1, newdata = ann_salary1))
-
-mean((ann_salary1$model_1 - ann_salary1$amount)/ann_salary1$amount*100)
-
-ann_salary2 <- ann_salary2 %>% 
-  mutate(model_1 = predict(model_1, newdata = ann_salary2))
-
-mean((ann_salary2$model_1 - ann_salary2$amount)/ann_salary2$amount*100)
+train_set$predicted_salary <- predict(model_1, newdata = train_set)
+train_set$error_rate = round((train_set$predicted_salary - train_set$`PAY/SALARY`)/train_set$`PAY/SALARY`*100,2)
+mean(train_set$error_rate)
 
 ### Findings
 - Holding all other variables constant, the minimum wages that ANZ Bank's clients transferred are $2115.57, on average.
